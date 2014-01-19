@@ -1,0 +1,1 @@
+A Laravel 4 essential lesson from Code Bright book

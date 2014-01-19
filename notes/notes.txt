@@ -1,0 +1,41 @@
+1. Installation:
+
+	- clone app skeletn from git:
+		git clone git@github.com:laravel/laravel.git my_project
+
+	- install the 'laravel core' using 'composer':
+		composer install
+
+2. Basic routing:
+
+	- route config file:
+		
+		app/routes.php
+
+	- syntax:
+
+		Route::get();
+		Route::post();
+		Route::put();
+		Route::delete();
+		Route::any();
+
+		- route to 'http://domain.com/my/page':
+
+			Route::get('my/page', function() {
+				return 'Hello world!';
+			});
+
+	- route parameter:
+
+		Route::get('/books/{genre}', function($genre) {
+			return "Books in the {$genre} category.";
+		});
+
+		// {param?} -> optional parameter
+		Route::get('/books/{genre?}', function($genre = null) {
+			($genre == null) return 'Books index.';
+			return "Books in the {$genre} category.";
+		});
+
+
