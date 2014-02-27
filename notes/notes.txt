@@ -78,5 +78,142 @@
 			$file = 'path_to_my_file.pdf';
 			return Response::download($file);
 
+4. Filters: -> http://laravel.com/docs/routing#route-filters
 
+	- basic filters: -> 'app/filters.php'
 
+		Route::filter('birthday', function()
+		{
+			if (date('d/m') == '12/12') 
+			{
+				return View::make('birthday');
+			}
+		});
+
+		apply the filter to a route: 'app/routes.php'
+
+			Route::get('/', array(
+				'before' => 'birthday',
+				function()
+				{
+					return View::make('hello');
+				}
+			));
+
+	- multiple filters:	
+
+		Route::get('/', array(
+			'before' => array('birthday', 'christmas'),
+			function()
+			{
+				return View::make('hello');
+			}
+		));
+
+		Route::get('/', array(
+			'before' => 'birthday',
+			'after' => 'christmas',
+			function()
+			{
+				return View::make('hello');
+			}
+		));
+
+	- filter parameters:
+
+		// before filter
+		Route::filter('test', function($route, $request)
+		{
+		});
+		
+		// after filter
+		Route::filter('test', function($route, $request, $response)
+		{
+		});
+
+		$route, $request, $response are provided by laravel. if we want to create custom parameter, placed tehm after:
+
+		Route::filter('birthday', function($route, $request, $date)
+		{
+			if (date('d/m') == $date) {
+				return View::make('birthday');
+			}
+		});
+
+		implementation:
+
+		Route::get('/', array(
+			'before' => 'birthday:12/12', -> ':12/12' is the parameter passed to 'birthday' filter
+			function()
+			{
+				return View::make('hello');
+			}
+		));
+
+		more parameters:
+
+		Route::filter('birthday', function($route, $request, $first, $second, $third)
+		{
+			return "{$first} - {$second} - {$third}";
+		});
+
+		implementation:
+
+		Route::get('/', array(
+			'before' => 'birthday:foo,bar,baz', -> moreparameters are separated by comma
+			function()
+			{
+				return View::make('hello');
+			}
+		));
+
+	- filter classes:
+
+		- create 'filters' folder in 'app'
+
+		- update 'autoload' in 'composer.json' to autload 'app/filters' folder
+
+		- update composer autoloader:
+			composer dump-autoload
+
+		- create file 'Birthday.php' in 'app/filters'
+
+		- create the class filter alias in 'app/routes.php':
+
+			Route::filter('birthday', 'BirthdayFilter');
+
+		- implement the 'Birthday' filter to a route:
+
+			Route::get('/', array(
+				'before' => 'birthday',
+				function()
+				{
+					return View::make('hello');
+				}
+			));
+
+	- global filters:
+
+		// app/filters.php
+		App::before(function($request)
+		{
+		
+		});
+		
+		App::after(function($request, $response)
+		{
+		
+		});
+
+	- default filters:
+
+		// app/filters.php
+		Route::filter('auth', function() {});
+		Route::filter('auth.basic', function() {});
+		Route::filter('guest', function() {});
+		Route::filter('csrf', function() {});
+			
+	- pattern filters:
+
+		// app/routes.php
+		Route::when('profile/*', 'birthday'); -> will run the 'birthday' filter on all route URIs that start with 'profile/'

@@ -19,3 +19,25 @@ Route::get('/', function()
 Route::get('my/page', function() {
 	return 'Hello world!';
 });
+
+/*
+Route::get('/', array(
+	'before' => 'birthday',
+	function()
+	{
+		return View::make('hello');
+	}
+));
+*/
+
+/*
+Route::get('/', array(
+	'before' => 'birthday:12/12',
+	function()
+	{
+		return View::make('hello');
+	}
+));
+*/
+
+Route::filter('birthday', 'BirthdayFilter');
