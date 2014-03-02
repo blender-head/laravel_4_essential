@@ -217,3 +217,29 @@
 
 		// app/routes.php
 		Route::when('profile/*', 'birthday'); -> will run the 'birthday' filter on all route URIs that start with 'profile/'
+
+5. Controllers: -> http://laravel.com/docs/controllers
+
+	- creating controllers:
+
+		- location:
+			'app/controllers/'
+
+		- filename:
+			'app/controllers/ArticleController.php'
+
+		- class name:
+			'ArticleController'
+
+		- extends:
+			'BaseController'
+
+		- action name:
+			freeform
+
+	- controller routing:
+
+		Route::get('index', 'ArticleController@showIndex');
+		Route::post('article/new', 'ArticleController@newArticle');
+
+	- RESTful controllers:
